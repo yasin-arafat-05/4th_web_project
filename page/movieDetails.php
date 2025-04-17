@@ -23,8 +23,8 @@ if (isset($_GET['id'])) {
    echo "$api_url";
 
    // <-----Current Movie info-----> 
-   $singleMovieInfo  = movieDB->getASingleMovie(285);
-
+   $singleMovieInfo  = $movieDB->getMoviesByIds(285);
+   #print_r($singleMovieInfo);
 
    //------- Initialize cURL session--------
    $ch = curl_init();
@@ -47,45 +47,30 @@ if (isset($_GET['id'])) {
        exit();
    }
    
-   //status code
+   //status code and close the curl session:
    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
    if ($http_code != 200) {
        error_log("API returned HTTP code: " . $http_code);
        error_log("API Response: " . $response);
    }
-   
-   // Close cURL session
    curl_close($ch);
    
+
    // Decode the JSON response
    $recommendations = json_decode($response, true);
-   // print the value with for each loop:
-   // foreach($recommendations as $row){
-   //     echo "------------> $row";
-   // }
-  // Handle case where response is a comma-separated string
-   if (is_string($recommendations)) {
-       $recommendations = explode(',', $recommendations);
-   }
+   #print_r($recommendations);
 
    // Clean the array: we got recommdation with comma seperated value:
-   $recommendations = array_map('intval', (array)$recommendations);
+  // $recommendations = array_map('intval', (array)$recommendations);
 
    if (empty($recommendations)) {
    error_log("No valid recommendations received");
    header("Location: ../index.php");
    exit();}
-   $recom = $movieDB->getMoviesByIds($recommendations); 
-   // error_log("Test query results:---------------> " . print_r($test, true));
-   // //$recomm = movieDB->getMoviesByIds($recommendations);
-   foreach($singleMovieInfo as $row){
-           echo "-----------------> {$row['key']} <br>";
-          // echo "-----------------> {$row['title']} <br>";
-          // echo "-----------------> {$row['overview']} <br>";
-          // echo "-----------------> {$row['image_url']} <br>";
-          // echo "-----------------> <br>";
+   $recom = $movieDB->recommMovies($recommendations); 
+   foreach($recom as $row){
+    echo "<br> -----------------------> {$row['title']} <br>";
    }
-   
    }else {
        header("Location: ../index.php");
        exit();
@@ -140,3 +125,4 @@ if (isset($_GET['id'])) {
 
 </body>
 </html>
+

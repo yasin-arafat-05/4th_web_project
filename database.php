@@ -82,16 +82,55 @@ class MovieDB {
             return [];
         }
     }
-
     
+    #  #<-------------------------------------------------------------------------------->
     #  #<------------------------- Fetch movie info by id ------------------------->
-    public function getMoviesByIds($id_array){
-        $query = "SELECT * FROM movieinfo M WHERE M.id IN (:id_array)";
+    #  #<------------------------- For movieDetails page  ------------------------->
+    #  #<-------------------------------------------------------------------------------->
+
+    public function getMoviesByIds($id){
+        $query = "
+        select * from movie_image inner join
+        (select * from video inner join 
+        (select id,genres,budget,runtime,crew,cast,
+        original_language,release_date,production_companies
+        from movieinfo where movieinfo.id=:id) as MI 
+        on video.movie_id=MI.id) as F
+        on F.id = movie_image.movie_id
+        ";
+
         try{
             $stmt = $this->db->prepare($query);
-            $stmt->bindValue(':id_array',$id_array, PDO::PARAM_STR);
+            $stmt->bindValue(':id',$id, PDO::PARAM_STR);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            error_log("Error fetching recommendation movie data from database" . $e->getMessage());
+            return [];
+        }
+    }
+
+     #  #<-------------------------------------------------------------------------------->
+     #  #<------------------------- Get recommendated movie info  ------------------------>
+     #  #<-------------------------------------------------------------------------------->
+
+    public function recommMovies($movieIds){
+        print_r($movieIds);
+        $placeholders = implode(',', array_fill(0, count($movieIds), '?'));
+        echo "$placeholders";
+        $query = "
+            SELECT M.image_url, T.title, T.overview 
+            FROM movie_image M 
+            INNER JOIN movie T ON T.movie_id = M.movie_id 
+            WHERE T.movie_id IN ($placeholders)
+        ";
+        try{
+            $stmt = $this->db->prepare($query);
+            $stmt->execute($movieIds);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            error_log("Found " . count($results) . " records");
+            return $results;
+            
         }catch(PDOException $e){
             error_log("Error fetching recommendation movie data from database" . $e->getMessage());
             return [];
@@ -101,8 +140,6 @@ class MovieDB {
 
 // <------------- Connect with Database ----------------->
 $movieDB = new MovieDB();
-
-
 // echo "----------------------1. Action Movie--------------------- <br>";
 // $action_movies = $movieDB->getMovies(7,"Action");
 // foreach($action_movies as $row){
@@ -127,7 +164,6 @@ $movieDB = new MovieDB();
 // foreach($thriller_movies as $row){
 //     echo "-----------------> {$row['original_title']} <br>";
 // }
-
 ?>
 
 

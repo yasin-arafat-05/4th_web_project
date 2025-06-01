@@ -10,6 +10,7 @@
 ★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅★⋅☆⋅   
 *********************************************************************************************
 Email: yasinarafat.e2021@gmail.com
+Last Modification date: 19-05-25
 -->
 
 <!DOCTYPE html>
@@ -22,6 +23,7 @@ Email: yasinarafat.e2021@gmail.com
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style/bot.css">
 </head>
 <body>
     <!-- __________________________Connection of PHP files___________________-->
@@ -29,9 +31,10 @@ Email: yasinarafat.e2021@gmail.com
         # require_once is used to import a php file(happence ones):
         require_once 'database.php';
         $movieDB = new MovieDB();
-        foreach($action_movies as $row){
+        /*foreach($action_movies as $row){
             echo "-----------------> {$row['original_title']} <br>";
-        }        
+        }
+        */      
         $action_movies = $movieDB->getMovies(10,"Action");
         $thriller_movies = $movieDB->getMovies(10,"Thriller");
         $science_movies = $movieDB->getMovies(10,"Science Fiction");
@@ -48,7 +51,15 @@ Email: yasinarafat.e2021@gmail.com
                 </h1>
             </div>
         <!-- _________ Menu container section will contains menu of the websites_______-->
-            <div class="menu-container"> 
+            <!-- ______ Profile containers Profile picture and other stuff relaed user _____-->
+            <div class="profile-container">  
+                <img class="profie-picture" src="img/profile.jpg" alt="user_profile">
+                <div class="profile-text-container">
+                    <span class="profile-text">Profile</span>
+                    <i class="fa-solid fa-caret-down"></i>
+                </div>
+
+                <div class="menu-container"> 
                 <ul class="menu-list">    
                    <li class="menu-list-item"><a class="active" href="index.php"> Home</a></li>
                    <li class="menu-list-item"><a href="#movie1234">Movies</a></li>
@@ -57,19 +68,12 @@ Email: yasinarafat.e2021@gmail.com
                    <li class="menu-list-item"><a href="#">About Us </a></li>
                 </ul>
             </div>
-            <!-- ______ Profile containers Profile picture and other stuff relaed user _____-->
-            <div class="profile-container">  
-                <img class="profie-picture" src="img/prokjkfile.jpg" alt="user_profile">
-                <div class="profile-text-container">
-                    <span class="profile-text">Profile</span>
-                    <i class="fa-solid fa-caret-down"></i>
-                </div>
                 <!-- ___________________ dark mood _____________________-->
-                <div class="toogle">
+                <!-- <div class="toogle">
                     <i class="fa-solid fa-moon toogle-icon"></i>
                     <i class="fa-solid fa-sun toogle-icon"></i>
                     <div class="toogle-ball"></div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -146,7 +150,10 @@ Email: yasinarafat.e2021@gmail.com
                             <p class="moive-list-item-decs">
                                 <?= substr($row['overview'],0,144) . ". . ."?>
                             </p> 
-                            <button class="movie-list-item-button">WATCH</button>
+                            <button 
+                            onclick="window.location.href='page/movieDetails.php?id=<?= $row['movie_id'] ?>'"
+                            class="movie-list-item-button">
+                            WATCH</button>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -183,7 +190,9 @@ Email: yasinarafat.e2021@gmail.com
                             <p class="moive-list-item-decs">
                                 <?= substr($row['overview'],0,144) . ". . ."?>
                             </p> 
-                            <button class="movie-list-item-button">WATCH</button>
+                            <button 
+                            onclick="window.location.href='page/movieDetails.php?id=<?= $row['movie_id'] ?>'"
+                            class="movie-list-item-button">WATCH</button>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -209,7 +218,10 @@ Email: yasinarafat.e2021@gmail.com
                                 <p class="moive-list-item-decs">
                                     <?= substr($row['overview'],0,144) . ". . ."?>
                                 </p> 
-                                <button class="movie-list-item-button">WATCH</button>
+                                <button 
+                                onclick="window.location.href='page/movieDetails.php?id=<?= $row['movie_id'] ?>'"
+                                class="movie-list-item-button">
+                                WATCH</button>
                             </div>
                             <?php endforeach; ?>
                         </div>
@@ -219,6 +231,25 @@ Email: yasinarafat.e2021@gmail.com
         </div>
     </div>
     <div class="inner-space"></div>
+      <!-- ___________________________  Chat Bot Ui _________________________ -->
+      <div id="chatbot-icon">🫟</div>
+    <div id="chatbot-container" class="hidden">
+        <!-- chatbot-header part -->
+        <div id="chatbot-header">
+            <span>Cinema-Bot</span>
+            <button id="close-btn">☠️</button>
+        </div>
+        <div id="chatbot-body">
+            <div id="chatbot-messages">
+            </div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" 
+                            placeholder="Type a message.....">
+                <button id="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+    <!-- ---------------- java script ------------------------>
     <script src="app.js"> 
     </script>    
 </body>

@@ -89,14 +89,14 @@ class MovieDB {
     #  #<-------------------------------------------------------------------------------->
 
     public function getMoviesByIds($id){
-        $query = "
-        select * from movie_image inner join
+        $query = "select * from movie_image inner join
         (select * from video inner join 
         (select id,genres,budget,runtime,crew,cast,
         original_language,release_date,production_companies
         from movieinfo where movieinfo.id=:id) as MI 
         on video.movie_id=MI.id) as F
         on F.id = movie_image.movie_id
+        join movie on movie.movie_id = F.id
         ";
 
         try{
@@ -110,16 +110,16 @@ class MovieDB {
         }
     }
 
-     #  #<-------------------------------------------------------------------------------->
-     #  #<------------------------- Get recommendated movie info  ------------------------>
-     #  #<-------------------------------------------------------------------------------->
+    #  #<-------------------------------------------------------------------------------->
+    #  #<------------------------- Get recommendated movie info  ------------------------>
+    #  #<-------------------------------------------------------------------------------->
 
     public function recommMovies($movieIds){
-        print_r($movieIds);
+        //print_r($movieIds);
         $placeholders = implode(',', array_fill(0, count($movieIds), '?'));
-        echo "$placeholders";
+        //echo "$placeholders";
         $query = "
-            SELECT M.image_url, T.title, T.overview 
+            SELECT M.image_url, T.title, T.overview,T.movie_id
             FROM movie_image M 
             INNER JOIN movie T ON T.movie_id = M.movie_id 
             WHERE T.movie_id IN ($placeholders)
@@ -136,6 +136,23 @@ class MovieDB {
             return [];
         }
     }
+
+    #  #<-------------------------------------------------------------------------------->
+    #  #<------------------------- Get recommendated movie info  ------------------------>
+    #  #<-------------------------------------------------------------------------------->
+    public function signup($name,$email,$password,$confirm_password){
+        // -- check email is already taken or not --
+        try{
+            $stmt = $this->db->prepare("SELECT * FROM users where email=:email");
+            $stmt->bindValue(':email',$email,PDO::PARAM_STR);
+
+
+        }catch(PDOException $e){
+            error_log("Error fetching recommendation movie data from database" . $e->getMessage());
+            return [];
+        }
+    }
+
 }
 
 // <------------- Connect with Database ----------------->

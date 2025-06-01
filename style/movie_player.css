@@ -1,0 +1,112 @@
+
+
+/* **********MovieDetails.php**************** */
+/*
+************************************************
+************************************************
+****************** video and image *************
+************************************************
+************************************************
+*/
+
+.vedio-container{
+    display: flex;
+}
+
+/*
+   display will devided into,  <--- 2:4 ratio ---> 
+*/
+.vedio-container .info{
+    flex: 2;
+}
+
+.vedio-container .info .image{
+   margin-left: 50px;
+   margin-top: 60px;
+}
+
+.vedio-container .player{
+    flex: 4;
+    margin-top: 20px;
+    
+}
+
+/*
+************************************************
+************************************************
+****** Description About the movie *************
+************************************************
+************************************************
+*/
+
+.movie-card {
+    padding: 30px;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+}
+
+.movie-header h1 {
+    color: #fff;
+    font-size: 32px;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.movie-meta {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.meta-badge {
+    background-color: #2a2a3c;
+    color: #e50914;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #e50914;
+    white-space: nowrap;
+}
+
+.movie-description h2 {
+    color: #e50914;
+    font-size: 20px;
+    margin: 20px 0 10px 0;
+    font-weight: 600;
+}
+
+.movie-description p {
+    color: #ddd;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.movie-details table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.movie-details td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #3a3a4c;
+    color: #ddd;
+    vertical-align: top;
+}
+
+.movie-details td:nth-child(odd) {
+    color: #aaa;
+    font-weight: 400;
+    width: 20%;
+}
+
+.movie-details tr:last-child td {
+    border-bottom: none;
+}
+
+
+
+

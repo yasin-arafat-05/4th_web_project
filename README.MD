@@ -19,6 +19,8 @@
 
 ## 1. Create a new Account with AI Agent:
 
+<img src="img/git_img/git_img05.png" height="600" width="800" alt="Git Image">
+
 ![img](img/git_img/git_img05.png)
 
 
@@ -43,4 +45,5 @@
     - LANGGRAPH 
     
 # [backend_code_link](https://github.com/yasin-arafat-05/movie_web_backend_4th)
+
 
